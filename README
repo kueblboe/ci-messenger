@@ -1,0 +1,12 @@
+The CI Messenger is a simple server socket application that visualizes build statuses sent from CI servers.
+
+Supported CI servers:
+ * Jenkins / Hudson with Notification Plugin (https://wiki.jenkins-ci.org/display/JENKINS/Notification+Plugin)
+ 
+
+Technology used:
+ * Scala 2.9.0
+ * Maven 3.0.3
+
+How to run:
+ java -jar ci-messenger-0.0.1-SNAPSHOT-jar-with-dependencies.jar 
