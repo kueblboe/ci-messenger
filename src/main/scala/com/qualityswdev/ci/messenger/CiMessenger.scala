@@ -13,8 +13,7 @@ object CiMessenger extends App {
       val socket = listener accept
       val input = new BufferedReader(new InputStreamReader(socket getInputStream))
       val buildStatus = BuildStatusParser parse(input readLine)
-      //TODO: medium display(buildStatus)
-      println(buildStatus)
+      Medium display(buildStatus)
       input.close
       socket.close
     }
@@ -28,17 +27,23 @@ object CiMessenger extends App {
 
 object BuildStatusParser {
   def parse(buildStatusAsJson: String): BuildStatus = {
-    implicit def any2string(a: Any)  = a.toString
-    implicit def any2double(a: Any)  = a.asInstanceOf[Double]
-
     JSON.parseFull(buildStatusAsJson) match {
-	  case Some(x) => {
-        val statusMap = x.asInstanceOf[Map[String, Map[String, Any]]]
-        val build = statusMap("build")
-        BuildStatus(build("url"), build("phase"), build("number"), build.getOrElse("status", "SUCCESS"))
+	  case Some(buildStatus) => {
+        val buildStatusAsMap = buildStatus.asInstanceOf[Map[String, Map[String, Any]]]
+        val build = buildStatusAsMap("build")
+        BuildStatus(build("url").toString,
+        		    build("phase").toString,
+        		    build("number").asInstanceOf[Double],
+        		    build.getOrElse("status", "SUCCESS").toString)
       }
       case None => throw new InvalidBuildStatusException()
     }
+  }
+}
+
+object Medium {
+  def display(buildStatus: BuildStatus) {
+	println(buildStatus)
   }
 }
 
